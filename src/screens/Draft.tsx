@@ -8,6 +8,7 @@ import { reducedMotion, getPref, setPref } from "../lib/prefs";
 import { useDesktop } from "../lib/useMedia";
 import { HalfRink, FullRink, JerseyStrip } from "../components/Rink";
 import { BonusChip, CapIntro, Eyebrow, Modal } from "../components/Chrome";
+import { FitText } from "../components/FitText";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const GROUPS: { key: "F" | "D" | "G"; label: string; pos: string[] }[] = [
@@ -175,6 +176,7 @@ type PanelProps = {
 
 function SpinPanel({ s, roster, spinning, reel, land, iq }: PanelProps) {
   const d = s.d;
+  const desktop = useDesktop();
   const dec = reel ? reel.dec : roster ? decadeLabel(roster.decade) : "—";
   const frName = reel ? reel.fr : roster ? FRANCHISES[roster.fr].name : "—";
   const fr = roster && !reel ? FRANCHISES[roster.fr] : null;
@@ -187,7 +189,7 @@ function SpinPanel({ s, roster, spinning, reel, land, iq }: PanelProps) {
       <div className="reels" aria-live="polite">
         <div className={"reel dec" + (spinning ? " rolling" : "")}><small>DECADE</small><b>{ready ? "—" : dec}</b></div>
         <div className={"reel fr" + (spinning ? " rolling" : "")}>
-          <small>FRANCHISE</small><b>{ready ? "SIX DRAFTED" : frName}</b>
+          <small>FRANCHISE</small><FitText text={ready ? "SIX DRAFTED" : frName} max={desktop ? (s.mode === "cap" ? 22 : 40) : 18} min={11} />
           <span className="team-bar" style={{ background: fr ? `linear-gradient(90deg, ${fr.c1} 0 50%, ${fr.c2} 50% 100%)` : "transparent" }} />
         </div>
       </div>

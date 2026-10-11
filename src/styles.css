@@ -173,8 +173,8 @@ h1, h2, p { margin: 0; }
 .reel { position: relative; background: var(--surface); border: 2px solid var(--border); padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 10px; }
 .reel small { font: 10px/1 var(--font-mono); letter-spacing: 1.8px; color: var(--muted); }
 .reel b { font: 52px/0.92 var(--font-display); color: var(--ink); letter-spacing: -.5px; }
-.reel.fr b { font-size: 40px; text-transform: uppercase; }
-.draft.cap .reel b { font-size: 34px; } .draft.cap .reel.fr b { font-size: 22px; }
+.reel.fr b { font-size: 40px; text-transform: uppercase; display: block; max-width: 100%; overflow: hidden; }
+.draft.cap .reel b { font-size: 34px; }
 .reel.rolling b { color: var(--muted); }
 .team-bar { height: 6px; margin-top: 4px; }
 .spin-tags { display: flex; align-items: center; gap: 10px; }
@@ -291,7 +291,7 @@ h1, h2, p { margin: 0; }
 .draft.is-mob .reel.dec { flex: 0 0 32%; }
 .draft.is-mob .reel.fr { flex: 1 1 auto; min-width: 0; }
 .draft.is-mob .reel b { font-size: 26px; }
-.draft.is-mob .reel.fr b { font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.draft.is-mob .reel.fr b { white-space: nowrap; }
 .draft.is-mob .reel small { font-size: 8.5px; }
 .draft.is-mob .spin-tags, .draft.is-mob .reroll-label { display: none; }
 .draft.is-mob .rerolls { grid-template-columns: auto 1fr 1fr; align-items: center; }
@@ -526,7 +526,7 @@ h1, h2, p { margin: 0; }
   .record { font-size: 110px; }
   .draft.cap .draft-cols { grid-template-columns: 220px minmax(0, 1fr) 320px; gap: 22px; }
   .draft-cols { grid-template-columns: 260px minmax(0, 1fr) 360px; gap: 24px; }
-  .reel b { font-size: 44px; } .reel.fr b { font-size: 32px; }
+  .reel b { font-size: 44px; }
   .vs-cell.name b { white-space: normal; }
   .bt-row { grid-template-columns: 60px minmax(0, 1fr) 90px 70px 180px; }
 }
