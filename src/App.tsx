@@ -10,6 +10,7 @@ import { ResultsScreen, VerdictScreen } from "./screens/Results";
 import { Leaderboard, topPick } from "./screens/Leaderboard";
 import { InfoPage } from "./screens/InfoPage";
 import { HOW, ABOUT } from "./content";
+import { postSeason } from "./lib/live";
 
 const FREE_PATHS = ["/how-it-works", "/about", "/leaderboard"];   // visiting these keeps your draft
 
@@ -118,6 +119,7 @@ function finishSeason(s: Session) {
   } else {
     setPref("latest." + s.mode, JSON.stringify({ day: dayKey(), wins: s.season.wins, losses: s.season.losses, rating: s.rating, top: topPick(s.d.picks) }));
   }
+  s.post = postSeason(s.mode, s.season.wins, s.d.picks, s.opp ? s.opp.id : undefined);
   bump();
   window.scrollTo(0, 0);
 }

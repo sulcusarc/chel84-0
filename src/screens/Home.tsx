@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { MenuButton } from "../components/Chrome";
 import { hms, secondsToMidnightET } from "../lib/game";
+import { Ticker as TickerData, fetchTicker } from "../lib/live";
 
 export function Footer() {
   return (
@@ -22,6 +23,14 @@ function Ticker() {
   const [copies, setCopies] = useState(2);
   const trackRef = useRef<HTMLDivElement>(null);
   const setRef = useRef<HTMLDivElement>(null);
+  const [live, setLive] = useState<TickerData | null>(null);
+  useEffect(() => {
+    let on = true;
+    const load = () => fetchTicker().then((t) => { if (on && t && !(t as any).failed) setLive(t); });
+    load();
+    const i = setInterval(load, 60000);
+    return () => { on = false; clearInterval(i); };
+  }, []);
   useEffect(() => { const i = setInterval(() => setT(secondsToMidnightET()), 1000); return () => clearInterval(i); }, []);
   useLayoutEffect(() => {
     const measure = () => {
@@ -37,8 +46,19 @@ function Ticker() {
     window.addEventListener("resize", measure);
     (document as any).fonts?.ready?.then(measure);
     return () => window.removeEventListener("resize", measure);
-  }, []);
-  const items: { label: string; value: string; tone?: string }[] = [
+  }, [live]);
+  const n = (v: unknown) => (Number(v) || 0).toLocaleString();
+  const items: { label: string; value: string; tone?: string }[] = live ? [
+    { label: "SEASONS PLAYED TODAY", value: n(live.seasons) },
+    { label: "DRAFTERS TODAY", value: n(live.drafters) },
+    ...(live.best_classic != null ? [{ label: "BEST CLASSIC RECORD", value: live.best_classic + "-" + (84 - live.best_classic) }] : []),
+    ...(live.best_iq != null ? [{ label: "BEST ICE-IQ RECORD", value: live.best_iq + "-" + (84 - live.best_iq) }] : []),
+    ...(live.most_drafted ? [{ label: "MOST DRAFTED TODAY", value: live.most_drafted.name.toUpperCase() }] : []),
+    { label: "CAP CUPS WON TODAY", value: n(live.cups_today) },
+    { label: "84-0 TODAY", value: n(live.perfect_today), tone: "gold" },
+    { label: "84-0 ALL TIME", value: n(live.perfect_all), tone: "gold" },
+    { label: "BOARD RESETS IN", value: hms(t) }
+  ] : [
     { label: "SEASONS", value: "55" },
     { label: "ROSTERS", value: "173" },
     { label: "PLAYERS", value: "3,441" },
