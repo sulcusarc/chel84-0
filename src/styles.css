@@ -42,6 +42,8 @@
 /* ---------- Base ---------- */
 * { box-sizing: border-box; }
 html, body { margin: 0; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { overflow-x: clip; }   /* nothing can make the page pan sideways on a phone; clip (not hidden) keeps the sticky header working */
 body { background: var(--page); color: var(--ink); font-family: var(--font-body); -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }
 a { color: inherit; }
 img { display: block; }
@@ -483,7 +485,7 @@ h1, h2, p { margin: 0; }
 .bn b .you-tag { margin-right: 6px; }
 .name-form { display: flex; flex-direction: column; gap: 8px; }
 .name-row { display: flex; gap: 8px; }
-.name-row input { flex: 1; min-width: 0; height: 40px; padding: 0 10px; border: 2px solid #3A4458; background: #0E1422; color: #fff; font: 15px var(--font-body); border-radius: 0; }
+.name-row input { flex: 1; min-width: 0; height: 40px; padding: 0 10px; border: 2px solid #3A4458; background: #0E1422; color: #fff; font: 16px var(--font-body); border-radius: 0; }  /* 16px or more stops iPhone Safari zooming in when the field is tapped */
 .name-row input:focus { outline: 2px solid var(--blue); outline-offset: 1px; }
 .name-row .btn { height: 40px; padding: 0 16px; }
 .name-err { font-size: 12px; color: #FF7A8A; }
