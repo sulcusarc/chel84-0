@@ -1,6 +1,7 @@
 // The game in progress lives here, outside React, so it survives a trip to How It Works or About and back.
 import { useEffect, useState } from "react";
 import { CORE, ModeKey, Player, RecordTeam, Season } from "./game";
+import type { PostResult } from "./live";
 
 export type Phase = "draft" | "ready" | "sim" | "done";
 export interface Draft {
@@ -22,6 +23,7 @@ export interface Session {
   note: string;             // e.g. Cap Cup free re-spin message
   history: CupResult[];     // Cap Cup: this session vs history
   id: number;               // changes whenever a new draft starts
+  post?: Promise<PostResult | null>;   // the season sent to the live leaderboard (null = backend unavailable)
 }
 
 let S: Session | null = null;

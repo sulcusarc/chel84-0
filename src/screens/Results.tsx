@@ -7,6 +7,7 @@ import { Session } from "../lib/session";
 import { playHorn, reducedMotion } from "../lib/prefs";
 import { Jersey } from "../components/Jersey";
 import { BonusChip, Eyebrow } from "../components/Chrome";
+import { PostResult, saveName, savedName } from "../lib/live";
 
 const ORDER = ["LW", "C", "RW", "D1", "D2", "G"];
 export const pct = (p: number) => (p < 0.0001 ? "<0.01%" : p < 0.01 ? (p * 100).toFixed(2) + "%" : p >= 0.995 ? ">99%" : (p * 100).toFixed(1) + "%");
@@ -88,19 +89,62 @@ export function ResultsScreen({ s, again, home, board }: { s: Session; again: ()
       </section>
 
       <aside className="res-side">
-        <div className="rank-card">
-          <small>TODAY’S RANK · {MODE_LABEL[s.mode]}</small>
-          <div className="rank-row"><b className="red">#{rank.rank.toLocaleString()}</b><span>of {rank.total.toLocaleString()} teams today</span></div>
-          <div className="rank-row"><b>{rank.beatsPct.toFixed(1)}%</b><span>of today’s teams beaten</span></div>
-          <hr />
-          <p className="rank-note">The live leaderboard opens soon. Until then you’re ranked against 1,000 simulated drafts, the same field for everyone today.</p>
-          <button className="link-btn" onClick={board}>SEE TODAY’S BOARD →</button>
-        </div>
+        <RankCard s={s} simRank={rank} board={board} />
         <button className="btn primary big" onClick={again}>DRAFT AGAIN</button>
         <button className="btn outline big" onClick={() => share(`I went ${season.wins}-${season.losses} in Chel 84-0 (${MODE_LABEL[s.mode]}) with ${names.join(", ")}. Can you go 84-0?`, setMsg)}>CHALLENGE A FRIEND</button>
         {msg && <p className="share-msg" role="status">{msg}</p>}
         <button className="link-btn center" onClick={home}>BACK TO GAME MODES</button>
       </aside>
+    </div>
+  );
+}
+
+/* Today's rank: the live board when it answers, otherwise the simulated field. */
+function RankCard({ s, simRank, board }: { s: Session; simRank: { rank: number; total: number; beatsPct: number }; board: () => void }) {
+  const [live, setLive] = useState<PostResult | null | undefined>(undefined);   // undefined = still sending
+  const [name, setName] = useState(savedName());
+  const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
+  useEffect(() => {
+    let on = true;
+    (s.post || Promise.resolve(null)).then((r) => { if (on) setLive(r && !r.failed ? r : null); });
+    return () => { on = false; };
+  }, [s.post]);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const local = CORE.nameProblem(name) as string;
+    if (local) { setErr(local); return; }
+    setBusy(true); setErr("");
+    const r = await saveName(name);
+    setBusy(false);
+    if (!r) { setErr("Couldn't reach the board. Try again in a moment."); return; }
+    if (r.error) { setErr(r.error); return; }
+    setLive((l) => (l ? { ...l, name: r.name!, onBoard: true } : l));
+  };
+
+  const r = live || simRank;
+  return (
+    <div className="rank-card">
+      <small>TODAY’S RANK · {MODE_LABEL[s.mode]}{live ? " · LIVE" : ""}</small>
+      {live === undefined ? <p className="rank-note">Posting your season…</p> : <>
+        <div className="rank-row"><b className="red">#{r.rank.toLocaleString()}</b><span>of {r.total.toLocaleString()} team{r.total === 1 ? "" : "s"} today</span></div>
+        <div className="rank-row"><b>{r.beatsPct.toFixed(1)}%</b><span>of today’s teams beaten</span></div>
+        <hr />
+        {live ? (
+          live.onBoard ? <p className="rank-note">On the board as <b>{live.name}</b>. Your next season replaces this one.</p> : (
+            <form className="name-form" onSubmit={submit}>
+              <label className="rank-note" htmlFor="boardName">Pick a display name to put this season on today’s board.</label>
+              <div className="name-row">
+                <input id="boardName" value={name} maxLength={20} autoComplete="nickname" placeholder="Display name" onChange={(e) => { setName(e.target.value); setErr(""); }} />
+                <button className="btn primary" disabled={busy || name.trim().length < 3}>{busy ? "…" : "POST"}</button>
+              </div>
+              {err && <p className="name-err" role="alert">{err}</p>}
+            </form>
+          )
+        ) : <p className="rank-note">The live board couldn’t be reached, so you’re ranked against 1,000 simulated drafts for today.</p>}
+      </>}
+      <button className="link-btn" onClick={board}>SEE TODAY’S BOARD →</button>
     </div>
   );
 }
