@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { applyTheme, Theme, usePref } from "../lib/prefs";
+import { applyTheme, Theme, usePref, unlockAudio, playHorn } from "../lib/prefs";
 
 const MenuIcon = () => (
   <svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><path d="M0 1h16M0 6h16M0 11h16" stroke="currentColor" strokeWidth="2" /></svg>
@@ -63,7 +63,7 @@ function MenuPanel({ go }: { go: (p: string) => void }) {
       </div>
       <div className="menu-sound">
         <div><p className="menu-label">SOUND</p><span>Goal horn when you win</span></div>
-        <button className={"toggle" + (sound === "on" ? " on" : "")} role="switch" aria-checked={sound === "on"} onClick={() => setSound(sound === "on" ? "off" : "on")}>
+        <button className={"toggle" + (sound === "on" ? " on" : "")} role="switch" aria-checked={sound === "on"} onClick={() => { const next = sound === "on" ? "off" : "on"; setSound(next); if (next === "on") { unlockAudio(); playHorn(); } }}>
           <span className="toggle-text">{sound === "on" ? "ON" : "OFF"}</span><span className="track"><span className="knob" /></span>
         </button>
       </div>
