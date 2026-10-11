@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { MenuButton } from "../components/Chrome";
 import { hms, secondsToMidnightET } from "../lib/game";
 
@@ -17,9 +17,29 @@ export function Footer() {
   );
 }
 
+/* Seamless crawl: one "set" of items is measured, enough copies are laid end to end to cover the screen,
+   and the track slides left by exactly one set before looping, so the restart lands on an identical frame. */
 function Ticker() {
   const [t, setT] = useState(secondsToMidnightET());
+  const [copies, setCopies] = useState(2);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const setRef = useRef<HTMLDivElement>(null);
   useEffect(() => { const i = setInterval(() => setT(secondsToMidnightET()), 1000); return () => clearInterval(i); }, []);
+  useLayoutEffect(() => {
+    const measure = () => {
+      const set = setRef.current, track = trackRef.current;
+      if (!set || !track) return;
+      const w = set.getBoundingClientRect().width;
+      if (!w) return;
+      track.style.setProperty("--crawl-shift", w + "px");
+      track.style.setProperty("--crawl-time", Math.round(w / 45) + "s");   // ~45px per second at any screen size
+      setCopies(Math.max(2, Math.ceil(window.innerWidth / w) + 1));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    (document as any).fonts?.ready?.then(measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
   const items: { label: string; value: string; tone?: string }[] = [
     { label: "SEASONS", value: "55" },
     { label: "ROSTERS", value: "173" },
@@ -32,12 +52,16 @@ function Ticker() {
     <section className="ticker" aria-label="Today">
       <div className="ticker-tag"><span className="ticker-dot" aria-hidden="true" />TODAY</div>
       <div className="ticker-window">
-        <div className="ticker-track">
-          {[0, 1].map((copy) => items.map((it) => (
-            <span key={copy + it.label} className="ticker-item" aria-hidden={copy ? true : undefined}>
-              <span className="label">{it.label}</span><span className={"value " + (it.tone || "")}>{it.value}</span>
-            </span>
-          )))}
+        <div className="ticker-track" ref={trackRef}>
+          {Array.from({ length: copies }, (_, copy) => (
+            <div key={copy} className="ticker-set" ref={copy === 0 ? setRef : undefined} aria-hidden={copy ? true : undefined}>
+              {items.map((it) => (
+                <span key={it.label} className="ticker-item">
+                  <span className="label">{it.label}</span><span className={"value " + (it.tone || "")}>{it.value}</span>
+                </span>
+              ))}
+            </div>
+          ))}
         </div>
       </div>
     </section>

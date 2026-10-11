@@ -590,3 +590,7 @@ h1, h2, p { margin: 0; }
 .home .masthead { position: relative; }
 .home-menu { position: absolute; right: var(--gutter); top: 36px; }
 @media (max-width: 640px) { .home-menu { top: 24px; } }
+
+/* ticker: each copy is a flex row that never wraps; the countdown keeps a fixed width so the set never changes size */
+.home .ticker-set { display: flex; flex: 0 0 auto; }
+.home .ticker-item .value { font-variant-numeric: tabular-nums; }

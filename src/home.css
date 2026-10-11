@@ -57,7 +57,8 @@
   .home .ticker-track {
     display: flex;
     white-space: nowrap;
-    animation: crawl 40s linear infinite;
+    animation: crawl var(--crawl-time, 40s) linear infinite;
+    will-change: transform;
   }
   .home .ticker:hover .ticker-track { animation-play-state: paused; }
   .home .ticker-item {
@@ -72,7 +73,7 @@
   .home .ticker-item .value { color: var(--ticker-value); font-size: 15px; font-weight: 600; letter-spacing: 1px; }
   .home .ticker-item .value.hot { color: var(--ticker-hot); }
   .home .ticker-item .value.gold { color: var(--yellow); }
-  @keyframes crawl { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes crawl { from { transform: translateX(0); } to { transform: translateX(calc(-1 * var(--crawl-shift, 50%))); } }
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
 
   .home /* Hero + modes */
