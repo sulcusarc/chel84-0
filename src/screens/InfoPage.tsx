@@ -1,10 +1,16 @@
 import { Block, Page } from "../content";
 import { Eyebrow } from "../components/Chrome";
 
+/* Turns email addresses in copy into mailto links. */
+function linkify(t: string) {
+  const parts = t.split(/([\w.+-]+@[\w-]+(?:\.[\w-]+)+)/);
+  return parts.map((p, i) => (i % 2 ? <a key={i} href={"mailto:" + p}>{p}</a> : p));
+}
+
 function BlockView({ b }: { b: Block }) {
   switch (b.t) {
-    case "p": return <p className="ip-p">{b.x}</p>;
-    case "ul": return <ul className="ip-ul">{b.x.map((x) => <li key={x}>{x}</li>)}</ul>;
+    case "p": return <p className="ip-p">{linkify(b.x)}</p>;
+    case "ul": return <ul className="ip-ul">{b.x.map((x) => <li key={x}>{linkify(x)}</li>)}</ul>;
     case "formula": return <div className="ip-formula">{b.x.map((x, i) => <div key={i} className={i === 0 && b.x.length > 1 && x === x.toUpperCase() ? "fh" : ""}>{x}</div>)}</div>;
     case "callout": return <div className="ip-callout"><small>{b.h}</small><p>{b.x}</p></div>;
     case "steps": return (

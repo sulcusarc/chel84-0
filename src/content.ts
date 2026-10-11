@@ -156,7 +156,7 @@ export const ABOUT: Page = {
     ] },
     { id: "contact", nav: "Contact", title: "CONTACT", blocks: [
       { t: "ul", x: [
-        "Questions, bugs or a rating you want to argue about: [SUPPORT EMAIL].",
+        "Questions, bugs or a rating you want to argue about: puck@chel84-0.com.",
         "See a display name that shouldn’t be on the leaderboard? Tap it and choose Report. Reports are reviewed within 24 hours.",
         "Inspired by 82-0."
       ] }
