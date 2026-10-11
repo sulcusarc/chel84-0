@@ -108,7 +108,7 @@ export function LeaveWarning({ pick, onStay, onLeave }: { pick: number; onStay: 
 export function CapIntro({ onStart, onClose }: { onStart: (hide: boolean) => void; onClose: () => void }) {
   const [hide, setHide] = useState(false);
   const steps = [
-    ["GET YOUR OPPONENT", "You’re dealt one of the ten greatest teams at random. Their record, scaled to 84 games, is the number to beat.", "blue"],
+    ["GET YOUR OPPONENT", "You’re dealt one of the ten winningest teams ever, at random. Their record, scaled to 84 games, is the number to beat.", "blue"],
     ["DRAFT UNDER THE CAP", "Every player has a price. Stars cost big, and your six can’t go over $28M.", "blue"],
     ["STUCK? FREE SPIN", "If nobody on a roster fits your budget, you get a free re-spin. It doesn’t use a re-roll.", "blue"],
     ["WIN THE CUP", "Play 84 games. Win more than they did and the Cap Cup is yours.", "red"]
@@ -121,7 +121,7 @@ export function CapIntro({ onStart, onClose }: { onStart: (hide: boolean) => voi
         <button className="close" aria-label="Close" onClick={onClose}>✕</button>
       </div>
       <h2>CAP CUP</h2>
-      <p className="intro-lede">Take on one of the ten best regular seasons in NHL history, with a salary cap on your six.</p>
+      <p className="intro-lede">Take on one of the ten winningest regular seasons in NHL history, with a salary cap on your six.</p>
       <ol className="steps">
         {steps.map(([t, d, c], i) => (
           <li key={t}><span className={"num " + c}>{i + 1}</span><div><b>{t}</b><p>{d}</p></div></li>

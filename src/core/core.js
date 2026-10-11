@@ -571,16 +571,18 @@ function anyAffordable(d, rosterKey) { return ROSTER_BY_KEY[rosterKey].players.s
    than the opponent's win rate scaled to 84 games (wins / games x 84). w-l-t: t is ties or overtime losses, whichever the era used.
    The lines are a best reading of each season's regular lineup and can be corrected by name; the records are exact. */
 const RECORD_TEAMS = [
-  { id: "BOS-1929", season: "1929–30", fr: "BOS", w: 38, l: 5,  t: 1,  lineup: { LW: "Dutch Gainor",   C: "Cooney Weiland",   RW: "Dit Clapper",       D1: "Eddie Shore",      D2: "Lionel Hitchman",    G: "Tiny Thompson" } },
-  { id: "MTL-1943", season: "1943–44", fr: "MTL", w: 38, l: 5,  t: 7,  lineup: { LW: "Toe Blake",      C: "Elmer Lach",       RW: "Maurice Richard",   D1: "Butch Bouchard",   D2: "Glen Harmon",        G: "Bill Durnan" } },
-  { id: "MTL-1976", season: "1976–77", fr: "MTL", w: 60, l: 8,  t: 12, lineup: { LW: "Steve Shutt",    C: "Jacques Lemaire",  RW: "Guy Lafleur",       D1: "Larry Robinson",   D2: "Serge Savard",       G: "Ken Dryden" } },
-  { id: "BOS-2022", season: "2022–23", fr: "BOS", w: 65, l: 12, t: 5,  lineup: { LW: "Brad Marchand",  C: "Patrice Bergeron", RW: "David Pastrnak",    D1: "Hampus Lindholm",  D2: "Charlie McAvoy",     G: "Linus Ullmark" } },
-  { id: "MTL-1977", season: "1977–78", fr: "MTL", w: 59, l: 10, t: 11, lineup: { LW: "Steve Shutt",    C: "Jacques Lemaire",  RW: "Guy Lafleur",       D1: "Larry Robinson",   D2: "Serge Savard",       G: "Ken Dryden" } },
-  { id: "CHI-2012", season: "2012–13", fr: "CHI", w: 36, l: 7,  t: 5,  lineup: { LW: "Brandon Saad",   C: "Jonathan Toews",   RW: "Marian Hossa",      D1: "Duncan Keith",     D2: "Brent Seabrook",     G: "Corey Crawford" } },
-  { id: "MTL-1944", season: "1944–45", fr: "MTL", w: 38, l: 8,  t: 4,  lineup: { LW: "Toe Blake",      C: "Elmer Lach",       RW: "Maurice Richard",   D1: "Butch Bouchard",   D2: "Glen Harmon",        G: "Bill Durnan" } },
-  { id: "DET-1995", season: "1995–96", fr: "DET", w: 62, l: 13, t: 7,  lineup: { LW: "Vyacheslav Kozlov", C: "Steve Yzerman", RW: "Sergei Fedorov",    D1: "Nicklas Lidstrom", D2: "Vladimir Konstantinov", G: "Chris Osgood" } },
-  { id: "MTL-1975", season: "1975–76", fr: "MTL", w: 58, l: 11, t: 11, lineup: { LW: "Steve Shutt",    C: "Jacques Lemaire",  RW: "Guy Lafleur",       D1: "Larry Robinson",   D2: "Serge Savard",       G: "Ken Dryden" } },
-  { id: "OTT-1919", season: "1919–20", team: "Ottawa Senators", colors: { c1: "#C8102E", c2: "#111111" }, w: 19, l: 5, t: 0, lineup: { LW: "Cy Denneny", C: "Frank Nighbor", RW: "Jack Darragh", D1: "Eddie Gerard", D2: "Sprague Cleghorn", G: "Clint Benedict" } }
+  /* The ten winningest regular seasons in NHL history (most wins, per NHL.com, set Oct 10, 2026 by Daniel). w-l-t: t is ties or
+     overtime losses, whichever the era used. Lines are a best reading of each team's regular lineup, for looks only. */
+  { id: "BOS-2022", season: "2022–23", fr: "BOS", w: 65, l: 12, t: 5,  lineup: { LW: "Brad Marchand",     C: "Patrice Bergeron", RW: "David Pastrnak",  D1: "Hampus Lindholm",  D2: "Charlie McAvoy",        G: "Linus Ullmark" } },
+  { id: "DET-1995", season: "1995–96", fr: "DET", w: 62, l: 13, t: 7,  lineup: { LW: "Vyacheslav Kozlov", C: "Steve Yzerman",    RW: "Sergei Fedorov",  D1: "Nicklas Lidstrom", D2: "Vladimir Konstantinov", G: "Chris Osgood" } },
+  { id: "TBL-2018", season: "2018–19", fr: "TBL", w: 62, l: 16, t: 4,  lineup: { LW: "Ondrej Palat",      C: "Brayden Point",    RW: "Nikita Kucherov", D1: "Victor Hedman",    D2: "Ryan McDonagh",         G: "Andrei Vasilevskiy" } },
+  { id: "MTL-1976", season: "1976–77", fr: "MTL", w: 60, l: 8,  t: 12, lineup: { LW: "Steve Shutt",       C: "Jacques Lemaire",  RW: "Guy Lafleur",     D1: "Larry Robinson",   D2: "Serge Savard",          G: "Ken Dryden" } },
+  { id: "MTL-1977", season: "1977–78", fr: "MTL", w: 59, l: 10, t: 11, lineup: { LW: "Steve Shutt",       C: "Jacques Lemaire",  RW: "Guy Lafleur",     D1: "Larry Robinson",   D2: "Serge Savard",          G: "Ken Dryden" } },
+  { id: "MTL-1975", season: "1975–76", fr: "MTL", w: 58, l: 11, t: 11, lineup: { LW: "Steve Shutt",       C: "Jacques Lemaire",  RW: "Guy Lafleur",     D1: "Larry Robinson",   D2: "Serge Savard",          G: "Ken Dryden" } },
+  { id: "DET-2005", season: "2005–06", fr: "DET", w: 58, l: 16, t: 8,  lineup: { LW: "Henrik Zetterberg", C: "Pavel Datsyuk",    RW: "Tomas Holmstrom", D1: "Nicklas Lidstrom", D2: "Mathieu Schneider",     G: "Manny Legace" } },
+  { id: "FLA-2021", season: "2021–22", fr: "FLA", w: 58, l: 18, t: 6,  lineup: { LW: "Jonathan Huberdeau", C: "Aleksander Barkov", RW: "Sam Reinhart",   D1: "Aaron Ekblad",     D2: "MacKenzie Weegar",      G: "Sergei Bobrovsky" } },
+  { id: "BOS-1970", season: "1970–71", fr: "BOS", w: 57, l: 14, t: 7,  lineup: { LW: "Wayne Cashman",     C: "Phil Esposito",    RW: "Ken Hodge",       D1: "Bobby Orr",        D2: "Dallas Smith",          G: "Gerry Cheevers" } },
+  { id: "EDM-1983", season: "1983–84", fr: "EDM", w: 57, l: 18, t: 5,  lineup: { LW: "Glenn Anderson",    C: "Wayne Gretzky",    RW: "Jari Kurri",      D1: "Paul Coffey",      D2: "Kevin Lowe",            G: "Grant Fuhr" } }
 ].map(t => {
   const gp = t.w + t.l + t.t, pts = 2 * t.w + t.t, pace = t.w / gp * CONFIG.GAMES;
   const fr = t.fr ? FRANCHISES[t.fr] : null;

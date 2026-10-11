@@ -75,7 +75,7 @@ export const HOW: Page = {
       { t: "table", head: ["MODE", "HOW IT PLAYS"], rows: [
         ["Classic", "Every player shows his rating and the stat line from his best season on that roster. Bonuses are previewed as you pick."],
         ["ICE-IQ", "Names only. No ratings, no stats, no hints, and each group is sorted A to Z. Bonuses still count, but you have to know them. Your results show what you earned."],
-        ["Cap Cup", "Face one of the ten best regular seasons ever, under a $28M salary cap. Every player has a price, and stars cost the most. Beat their record, scaled to 84 games, to win the Cup. If nobody on a roster fits your budget, you get a free re-spin."]
+        ["Cap Cup", "Face one of the ten winningest regular seasons in NHL history, under a $28M salary cap. Every player has a price, and stars cost the most. Beat their record, scaled to 84 games, to win the Cup. If nobody on a roster fits your budget, you get a free re-spin."]
       ] },
       { t: "formula", x: ["Wins to beat = their wins ÷ their games × 84, then one more", "1976–77 Canadiens: 60 ÷ 80 × 84 = 63.0, so you need 64"] }
     ] },
