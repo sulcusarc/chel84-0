@@ -6,13 +6,12 @@ import { useDesktop } from "../lib/useMedia";
 import { HalfRink, JerseyStrip } from "../components/Rink";
 import { BonusChip, Eyebrow } from "../components/Chrome";
 
-const SPEEDS: Record<number, number> = { 1: 150, 2: 75, 4: 32 };
+const MS_PER_GAME = 75;   // one fixed pace (what used to be 2x): a full season takes about 6 seconds
 
 export function SimScreen({ s, onDone, setTitle }: { s: Session; onDone: () => void; setTitle: (t: string) => void }) {
   const desktop = useDesktop();
   const season = s.season!;
   const [shown, setShown] = useState(() => (reducedMotion() ? 84 : 0));
-  const [speed, setSpeed] = useState(1);
   const doneRef = useRef(onDone);
   doneRef.current = onDone;
   const iq = s.mode === "iq";
@@ -22,9 +21,9 @@ export function SimScreen({ s, onDone, setTitle }: { s: Session; onDone: () => v
       const t = setTimeout(() => doneRef.current(), reducedMotion() ? 200 : 900);
       return () => clearTimeout(t);
     }
-    const t = setTimeout(() => setShown((n) => Math.min(84, n + 1)), SPEEDS[speed]);
+    const t = setTimeout(() => setShown((n) => Math.min(84, n + 1)), MS_PER_GAME);
     return () => clearTimeout(t);
-  }, [shown, speed]);
+  }, [shown]);
 
   useEffect(() => { setTitle(shown >= 84 ? "FINAL" : (desktop ? "SEASON · " : "") + "GAME " + Math.max(1, shown) + " OF 84"); }, [shown, setTitle, desktop]);
 
@@ -95,9 +94,6 @@ export function SimScreen({ s, onDone, setTitle }: { s: Session; onDone: () => v
             <div className="stat-box"><small>LONGEST STREAK</small><b>{st.best || "--"}</b><span>{st.best ? "games " + st.bestStart + " to " + st.bestEnd : "no wins yet"}</span></div>
             <div className="stat-box"><small>LAST LOSS</small><b>{lastLoss ? "G" + lastLoss.n : "NONE"}</b><span>{lastLoss ? "vs " + lastLoss.opp : "still perfect"}</span></div>
             <div className="sim-ctrls">
-              <div className="speeds" role="radiogroup" aria-label="Speed">
-                {[1, 2, 4].map((x) => <button key={x} role="radio" aria-checked={speed === x} className={speed === x ? "on" : ""} onClick={() => setSpeed(x)}>{x}×</button>)}
-              </div>
               <button className="btn primary" onClick={() => { setShown(84); doneRef.current(); }}>SKIP TO RESULTS</button>
             </div>
           </div>
