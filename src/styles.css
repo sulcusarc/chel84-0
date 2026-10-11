@@ -594,3 +594,7 @@ h1, h2, p { margin: 0; }
 /* ticker: each copy is a flex row that never wraps; the countdown keeps a fixed width so the set never changes size */
 .home .ticker-set { display: flex; flex: 0 0 auto; }
 .home .ticker-item .value { font-variant-numeric: tabular-nums; }
+
+/* footer credit links are underlined */
+.footer-inner a { text-decoration: underline; text-underline-offset: 2px; }
+.footer-inner a:hover { color: var(--ink); }

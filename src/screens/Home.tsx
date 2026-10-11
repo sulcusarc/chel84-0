@@ -7,9 +7,7 @@ export function Footer() {
     <footer className="footer">
       <div className="footer-inner">
         <p>BUILT BY DANIEL HASSELL</p>
-        <p>SEASON STATS FROM THE NHL STATS SERVICE</p>
-        <p>PLAYER RATINGS AND GSAA CALCULATED BY DANIEL HASSELL</p>
-        <p>GSAA = SAVES − (SHOTS AGAINST × THAT SEASON’S LEAGUE SAVE %), PER 82 GAMES</p>
+        <p>SEASON STATS FROM THE <a href="https://www.nhl.com/stats/" target="_blank" rel="noreferrer">NHL STATS SERVICE</a></p>
         <p>INSPIRED BY <a href="https://82-0.com/" target="_blank" rel="noreferrer">82-0</a></p>
         <p>NOT AFFILIATED WITH THE NHL</p>
       </div>
