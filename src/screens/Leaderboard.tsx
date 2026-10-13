@@ -48,7 +48,7 @@ export function Leaderboard({ go }: { go: (p: string) => void }) {
   const me = isLive ? null : board.find((r) => r.isMe);
   const liveMe = live?.me || null;
   const doReport = (rid: string, name: string) => {
-    if (!window.confirm("Report the name “" + name + "”? It disappears from your board today, and Daniel reviews it within 24 hours.")) return;
+    if (!window.confirm("Report the name “" + name + "”? It disappears from your board today, and it gets reviewed within 24 hours.")) return;
     report(mode, rid); setHidden(hiddenRids()); setOpen(null);
   };
   const label = (n: string) => n.replace(/^sim-/, "SIM-");

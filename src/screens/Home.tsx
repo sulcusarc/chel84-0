@@ -7,7 +7,7 @@ export function Footer() {
   return (
     <footer className="footer">
       <div className="footer-inner">
-        <p>BUILT BY DANIEL HASSELL</p>
+        <p>BUILT BY AN AVID FAN</p>
         <p>SEASON STATS FROM THE <a href="https://www.nhl.com/stats/" target="_blank" rel="noreferrer">NHL STATS SERVICE</a></p>
         <p>INSPIRED BY <a href="https://82-0.com/" target="_blank" rel="noreferrer">82-0</a></p>
         <p>NOT AFFILIATED WITH THE NHL</p>

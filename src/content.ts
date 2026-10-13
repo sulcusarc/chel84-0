@@ -97,7 +97,7 @@ export const ABOUT: Page = {
   tiles: [["55", "SEASONS"], ["1,394", "TEAM-SEASONS"], ["173", "ROSTERS"], ["3,441", "PLAYERS"], ["43", "TEAM IDENTITIES"]],
   sections: [
     { id: "who-made-this", nav: "Who made this", title: "WHO MADE THIS", blocks: [
-      { t: "p", x: "Chel 84-0 is built by Daniel Hassell, a die-hard hockey fan from Pennsylvania. Go Flyers." },
+      { t: "p", x: "Chel 84-0 is built by an avid fan. Go Flyers." },
       { t: "p", x: "It was inspired by 82-0, which asks the same question about basketball. This one is for hockey fans who have spent too long arguing about whether the ’80s Oilers would beat the ’70s Canadiens." }
     ] },
     { id: "the-data", nav: "The data", title: "THE DATA", blocks: [
