@@ -49,10 +49,11 @@ export function DraftScreen({ s, onStartSeason }: { s: Session; onStartSeason: (
   }
   async function land(kind: "both" | "decade" | "franchise") {
     const my = ++run.current;
+    const full = kind !== "both" && CORE.rerollIsFull(d, kind);
     const next: Roster | null = kind === "both" ? CORE.spin(d, s.rng) : CORE.reroll(d, kind, s.rng);
     if (!next) return;
     setSel(null); setSpinning(true);
-    await animate(kind, next);
+    await animate(full ? "both" : kind, next);
     if (my !== run.current) return;
     setReel(null); setSpinning(false);
     if (cap && !CORE.anyAffordable(d, d.current)) {
@@ -182,6 +183,8 @@ function SpinPanel({ s, roster, spinning, reel, land, iq }: PanelProps) {
   const fr = roster && !reel ? FRANCHISES[roster.fr] : null;
   const canDec = !spinning && s.phase === "draft" && CORE.canReroll(d, "decade");
   const canFr = !spinning && s.phase === "draft" && CORE.canReroll(d, "franchise");
+  const fullDec = canDec && CORE.rerollIsFull(d, "decade");
+  const fullFr = canFr && CORE.rerollIsFull(d, "franchise");
   const ready = s.phase !== "draft";
   return (
     <section className="spin-col">
@@ -204,10 +207,10 @@ function SpinPanel({ s, roster, spinning, reel, land, iq }: PanelProps) {
       <p className="reroll-label">RE-ROLLS · ONE EACH PER DRAFT</p>
       <div className="rerolls">
         <button className="reroll" disabled={!canDec} onClick={() => land("decade")}>
-          <b>DECADE</b><small>{d.used.decade ? "Used" : "1 left"}</small>
+          <b>DECADE</b><small>{d.used.decade ? "Used" : fullDec ? "Full re-spin" : "1 left"}</small>
         </button>
         <button className="reroll" disabled={!canFr} onClick={() => land("franchise")}>
-          <b>TEAM</b><small>{d.used.franchise ? "Used" : "1 left"}</small>
+          <b>TEAM</b><small>{d.used.franchise ? "Used" : fullFr ? "Full re-spin" : "1 left"}</small>
         </button>
       </div>
     </section>

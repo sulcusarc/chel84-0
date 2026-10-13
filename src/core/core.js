@@ -374,9 +374,20 @@ function rerollOptions(d, kind) {
   const cur = ROSTER_BY_KEY[d.current];
   // Cap Cup: a re-roll only lands on a roster where someone still fits under the cap, so it never turns into a surprise free re-spin of both reels
   const pool = availableRosters(d).filter(r => r.key !== cur.key && (!d.capOnly || anyAffordable(d, r.key)));
-  return kind === "decade"
+  const normal = kind === "decade"
     ? pool.filter(r => r.fr === cur.fr)
     : pool.filter(r => r.decade === cur.decade);
+  if (normal.length) return normal;
+  // Oct 12, 2026: a franchise that only existed in one decade (e.g. 1970s California Golden Seals) has nowhere
+  // for a decade re-roll to go, so the re-roll becomes a full re-spin: new decade and new franchise.
+  return pool.filter(r => r.fr !== cur.fr && r.decade !== cur.decade);
+}
+/* True when this re-roll can't keep the other reel and will re-spin both instead. */
+function rerollIsFull(d, kind) {
+  if (!d.current) return false;
+  const cur = ROSTER_BY_KEY[d.current];
+  const opts = rerollOptions(d, kind);
+  return opts.length > 0 && opts.every(r => kind === "decade" ? r.fr !== cur.fr : r.decade !== cur.decade);
 }
 function canReroll(d, kind) {
   if (d.used[kind]) return false;
@@ -731,7 +742,7 @@ const CORE = {
   FRANCHISES, ROSTERS, ROSTER_BY_KEY, DECADES, decadeLabel, SLOTS, CONFIG, OPPONENTS,
   mulberry32, randInt, pick, shuffle, gauss,
   newDraft, openSlots, picksCount, isDraftComplete, availableRosters, spin,
-  rerollOptions, canReroll, reroll, eligible, isDrafted, slotFor, slotOptions, draftPlayer,
+  rerollOptions, rerollIsFull, canReroll, reroll, eligible, isDrafted, slotFor, slotOptions, draftPlayer,
   BONUS, CAP, ORIGINAL_SIX, isO6, CHICLETS, CONF_NAME, confOf, SHORT_NAME, slotBoosts, ratingBreakdown, bonusPreview,
   lineupRating, winProb, simulateSeason, tierFor, botDraft, buildField, rankAgainst, leaderboard, nameProblem,
   RECORD_TEAMS, pickRecordTeam, beatsRecord,
